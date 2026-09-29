@@ -1,0 +1,9 @@
+# 1. Build (the output goes to ~/canbuild)
+cd ~/Arduino/lidar/cansend/can
+arduino --board STMicroelectronics:stm32:Nucleo_144:pnum=NUCLEO_F207ZG \
+        --pref build.path=$HOME/canbuild --verify can.ino
+
+# 2. Flash over the ST-Link
+O=~/.arduino15/packages/STMicroelectronics/tools/xpack-openocd/0.12.0-6
+$O/bin/openocd -s $O/openocd/scripts -f interface/stlink.cfg -f target/stm32f2x.cfg \
+  -c "program $HOME/canbuild/can.ino.elf verify reset exit"
